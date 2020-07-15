@@ -27,6 +27,7 @@ Surprisingly, it's rather simple to set up. Our build system uses CMake and alre
 ### On the device
 
 At last, we have a binary we can actually run. Copy it to  the phone, `chmod +x`, `./clickhouse server --config-path db/config.xml`, run some queries, it works!
+![Segmentation fault (core dumped)](segfault.png)
 Feels soo good to see my favorite message.
 It's a full-fledged development environment here in Termux, let's install `gdb` and attach it to see where the segfault happens. Run `gdb clickhouse --ex run '--config-path ....'`, wait for it to lauch for a minute, only to see how Android kills Termux becase it is out of memory. Are 4 GB of RAM not enough, after all? Looking at the `clickhouse` binary, its size is a whoppping 1.1 GB. The major part of the bloat is due to the fact that some of our computational code is heavily specialized for particular data types (mostly via C++ templates), and also the fact that we build and link a lot of third-party libraries statically. A non-essential part of the binary is debug symbols, which help to produce good stack traces in error messages. We can remove them with `strip -s ./clickhouse` right here on the phone, and after that, the size becomes more manageable, about 400 MB. Finally we can run `gdb` and see that the segfault is somewhere in `unw_backtrace`:
 
@@ -56,7 +57,7 @@ What is this function, and why do we need it? In this particular stack trace, we
 ### Is your phone good enough?
 
 There is a beaten genre of using data sets and queries of varying degree of syntheticity to prove that a particular DBMS you work on has performance superior to other, less advanced, DBMSes. We've moved past that, and instead use the DBMS we love as a benchmark of hardware. For this benchmark we use a small 100M rows obfuscated data set from Yandex.Metrica, about 12 GB compressed, and some queries representative of Metrica dashboards. There is [this page](https://clickhouse.tech/benchmark/hardware/) with crowdsourced results for various cloud and traditional servers and even some laptops, but how do the phones compare? Let's find out. Following [the manual](https://clickhouse.tech/docs/en/operations/performance-test/) to download the necessary data to the phone and run the benchmark was pretty straightforward. One problem was that it can't run a third of queries because they use too much memory and the server gets killed by Android, so I had to script around that. Also I'm not sure how to reset a file system cache on Android, so the 'cold run' data is not correct. The results look pretty good:
-<insert screenshot> 
+![Pixel 3a is 5 times slower than Dell XPS 15](compare.png)
 
 My phone is Google Pixel 3a, and it only 5 times slower on averate than my Dell XPS 15 work laptop. The queries where the data doesn't fit into memory and has to go to disk (the flash, I mean) are noticeably slower, up to 20 times, but mostly they don't complete because the server gets killed -- it only has about 3 GB of memory available. Overall I think the result looks pretty good for the phone. High-end models should be even more performant, reaching performance comparable to some smaller laptops.
 
