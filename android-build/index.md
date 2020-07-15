@@ -68,6 +68,6 @@ My phone is Google Pixel 3a, and it only 5 times slower on averate than my Dell 
 
 This was a rather enjoyable exercise. Running a server on your phone is a nice way to give a demo, so we should probably publish a Termux package for ClickHouse. For this, we have to debug and fix the `unw_backtrace` segfault (I have my fingers crossed that it will be gone after adding `-fno-omit-frame-pointer`), and also fix some quirks that are just commented out for now. Most of the changes required for the Android build are already merged into our master branch.
 
-Building for Android turned out to be relatively simple -- all these experiments and writing took me about four days, and it was a first time I ever did anything Android-related. The NDK was simple to use, and our code was corss-platform enough so I only had to make minor modifications. If we didn't routinely build for AArch64 and had a hard dependency on SSE 4.2 or something, it would have been a different story.
+Building for Android turned out to be relatively simple -- all these experiments and writing took me about four days, and it was a first time I ever did anything Android-related. The NDK was simple to use, and our code was cross-platform enough so I only had to make minor modifications. If we didn't routinely build for AArch64 and had a hard dependency on SSE 4.2 or something, it would have been a different story.
 
 But the most important takeout is that now you don't have to obsess over choosing a new phone -- just benchmark it with ClickHouse.
