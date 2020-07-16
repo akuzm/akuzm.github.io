@@ -12,7 +12,7 @@ Turns out it's not that simple.
 
 * Immediately we encounter another problem -- the linker complains that the binary has a wrong type `ET_EXEC`. What does this mean? Android binaries must support dynamic relocation, so that they can be loaded at any address, probably for ASLR purposes. ClickHouse binaries do not normally use position-independent code, because we have measured that it gives a small performance penalty of about 1%. After tweaking compilation and linking flags to include `-fPIC` as much as possible, and battling some really weird linker errors, we finally arrive at a relocatable binary that has a correct type `ET_DYN`.
 
-* But it only gets worse. Now it complains about TLS section offset being wrong. After reading some mail archives where I could barely understand a word, I concluded that Android uses some different layout of memory for the section of the executable that holds thread-local variables, and `clang` from Android toolchain is patched to account for this. After that, I had to accept I won't be able to use normal tools, and reluctantly turned to the Android toolchain.
+* But it only gets worse. Now it complains about TLS section offset being wrong. After reading some mail archives where I could barely understand a word, I concluded that Android uses some different layout of memory for the section of the executable that holds thread-local variables, and `clang` from Android toolchain is patched to account for this. After that, I had to accept I won't be able to use familiar tools, and reluctantly turned to the Android toolchain.
 
 ### Using the Android toolchain
 
