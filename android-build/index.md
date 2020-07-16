@@ -82,6 +82,6 @@ Building for Android turned out to be relatively simple -- all these experiments
 But the most important takeout is that now you don't have to obsess over choosing a new phone -- just benchmark it with ClickHouse.
 
 
-_2020-07-16 [Alexander Kuzmenkov](https://github.com/akuzm)
+_2020-07-16 [Alexander Kuzmenkov](https://github.com/akuzm)_
 
 _Thanks to my colleague [Ivan Blinkov](https://github.com/blinkov) for proofreading._
